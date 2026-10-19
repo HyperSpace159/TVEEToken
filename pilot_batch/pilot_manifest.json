@@ -1,0 +1,142 @@
+[
+  {
+    "serialNo": "PILOT-ORA-10001",
+    "denomination": "Amber Orange",
+    "targetValue": 1,
+    "tokenHash": "0x6f20626714d8e15fde3582ba270ddc65da7ad37464ecd2ed4686226a5a401b4f",
+    "file": "print_pilot-ora-10001.svg"
+  },
+  {
+    "serialNo": "PILOT-ORA-10002",
+    "denomination": "Amber Orange",
+    "targetValue": 1,
+    "tokenHash": "0x6dcfd31fd6e783679b926f47daae22a48d9941c8ba2818e5f2ac3c51b1978dba",
+    "file": "print_pilot-ora-10002.svg"
+  },
+  {
+    "serialNo": "PILOT-ORA-10003",
+    "denomination": "Amber Orange",
+    "targetValue": 1,
+    "tokenHash": "0xc836a6d86544f3b6e537c1895071a1d3f6a1a5b54db8199ed130f4ad2bb1e332",
+    "file": "print_pilot-ora-10003.svg"
+  },
+  {
+    "serialNo": "PILOT-ORA-10004",
+    "denomination": "Amber Orange",
+    "targetValue": 1,
+    "tokenHash": "0x63fce30da06e66394f5c07dc1df860b8b4d04ce3e8e27487f8e364181aceee1c",
+    "file": "print_pilot-ora-10004.svg"
+  },
+  {
+    "serialNo": "PILOT-ORA-10005",
+    "denomination": "Amber Orange",
+    "targetValue": 1,
+    "tokenHash": "0x2465ad725bd1c5c66c852eeef76bc77869c8502c63f2ffca917e4326b04160c9",
+    "file": "print_pilot-ora-10005.svg"
+  },
+  {
+    "serialNo": "PILOT-GRE-10006",
+    "denomination": "Emerald Green",
+    "targetValue": 5,
+    "tokenHash": "0xa650d0d31f966c96a4d12c0bb9e0c22da7115aa2a9b2b33703c6a2d48ac917c1",
+    "file": "print_pilot-gre-10006.svg"
+  },
+  {
+    "serialNo": "PILOT-GRE-10007",
+    "denomination": "Emerald Green",
+    "targetValue": 5,
+    "tokenHash": "0x0eeb9f3ce5f3c8b196de68c96a37ee0f11861b1d7905778d8ce62f2cf0b68fc3",
+    "file": "print_pilot-gre-10007.svg"
+  },
+  {
+    "serialNo": "PILOT-GRE-10008",
+    "denomination": "Emerald Green",
+    "targetValue": 5,
+    "tokenHash": "0xdee641245286af53db8d434bb2587d1508b6a34cdd7230d75a487bc39149994d",
+    "file": "print_pilot-gre-10008.svg"
+  },
+  {
+    "serialNo": "PILOT-GRE-10009",
+    "denomination": "Emerald Green",
+    "targetValue": 5,
+    "tokenHash": "0x51e90cc92cb23841e00dcfc489bfcd4108416712f76acc9e397ccef13ddd4740",
+    "file": "print_pilot-gre-10009.svg"
+  },
+  {
+    "serialNo": "PILOT-GRE-10010",
+    "denomination": "Emerald Green",
+    "targetValue": 5,
+    "tokenHash": "0xea8bc92bad03aa5a7f60a31b325c54b6f1ece1fb59e229a9c247d14dbf5a2b04",
+    "file": "print_pilot-gre-10010.svg"
+  },
+  {
+    "serialNo": "PILOT-BLU-10011",
+    "denomination": "Cobalt Blue",
+    "targetValue": 20,
+    "tokenHash": "0xc0f9a5b6d6314c917f1d7679dd442fc1b16479314d25587ca8feae9918ebc5be",
+    "file": "print_pilot-blu-10011.svg"
+  },
+  {
+    "serialNo": "PILOT-BLU-10012",
+    "denomination": "Cobalt Blue",
+    "targetValue": 20,
+    "tokenHash": "0xce8798cc5c9a8b7f2d8b6a452a743b0813ada1c853eb4e2a05a988ef5b406e95",
+    "file": "print_pilot-blu-10012.svg"
+  },
+  {
+    "serialNo": "PILOT-BLU-10013",
+    "denomination": "Cobalt Blue",
+    "targetValue": 20,
+    "tokenHash": "0xa09814e95febe919b0abe5ef012f17b980fb1c624d672f737348a6aacbf69076",
+    "file": "print_pilot-blu-10013.svg"
+  },
+  {
+    "serialNo": "PILOT-BLU-10014",
+    "denomination": "Cobalt Blue",
+    "targetValue": 20,
+    "tokenHash": "0xa9b009ca8774a233d045c6b04c8bbcbc7d8807e3a8379cc9ad68f00dce481562",
+    "file": "print_pilot-blu-10014.svg"
+  },
+  {
+    "serialNo": "PILOT-BLU-10015",
+    "denomination": "Cobalt Blue",
+    "targetValue": 20,
+    "tokenHash": "0x5a937df1b5d48429a54d84f5e23e06db3696cde6bf57cfb43ba603a7c8f2d3c8",
+    "file": "print_pilot-blu-10015.svg"
+  },
+  {
+    "serialNo": "PILOT-PUR-10016",
+    "denomination": "Imperial Purple",
+    "targetValue": 100,
+    "tokenHash": "0x5e49c1c7d923b535f0a9f1f714585faf207dfac69cd0e0b556970068bf06f5f3",
+    "file": "print_pilot-pur-10016.svg"
+  },
+  {
+    "serialNo": "PILOT-PUR-10017",
+    "denomination": "Imperial Purple",
+    "targetValue": 100,
+    "tokenHash": "0xd028435f4988c4e2ff0ea88e5dd6efa65ccdba72aac2d9fd13be4dc9eb23112f",
+    "file": "print_pilot-pur-10017.svg"
+  },
+  {
+    "serialNo": "PILOT-PUR-10018",
+    "denomination": "Imperial Purple",
+    "targetValue": 100,
+    "tokenHash": "0x488f0e90471bbc40f19d22462374162fa387d7f382cb6f7a77fa27ef77aac377",
+    "file": "print_pilot-pur-10018.svg"
+  },
+  {
+    "serialNo": "PILOT-PUR-10019",
+    "denomination": "Imperial Purple",
+    "targetValue": 100,
+    "tokenHash": "0xff4100502a34826cb9a5c6764513693c9a72e6116e1fbae4e865cf0c0fab8e40",
+    "file": "print_pilot-pur-10019.svg"
+  },
+  {
+    "serialNo": "PILOT-PUR-10020",
+    "denomination": "Imperial Purple",
+    "targetValue": 100,
+    "tokenHash": "0xe7e64afe286f37a83a973bb45e7ff3eeb06502597a21e62719d6af632ba199f2",
+    "file": "print_pilot-pur-10020.svg"
+  }
+]

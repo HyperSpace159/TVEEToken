@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>T-VEE Community Pilot Batch - Print Sheet (A4 Ready)</title>
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 10mm;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f0f0f0;
+    }
+    .no-print-bar {
+      background: #24292e;
+      color: #fff;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    .print-btn {
+      background: #2ea44f;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .a4-page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 20px auto;
+      background: white;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      padding: 10mm;
+      box-sizing: border-box;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12mm;
+    }
+    .card-print {
+      width: 100%;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .card-print img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    @media print {
+      body { background: white; }
+      .no-print-bar { display: none; }
+      .a4-page {
+        margin: 0;
+        box-shadow: none;
+        page-break-after: always;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="no-print-bar">
+    <div>
+      <h2 style="margin:0;">🎟️ T-VEE Pilot Batch: ใบพิมพ์ธนบัตรสีแบบบัตรขูดสำหรับชุมชน (A4)</h2>
+      <small>คำแนะนำ: ใช้กระดาษการ์ด 210-250 แกรม แล้วติดสติกเกอร์ฟอยล์ขูดสีเงินขนาด 50x50 มม. ทับบนช่อง JAB Code</small>
+    </div>
+    <button class="print-btn" onclick="window.print()">🖨️ กดสั่งพิมพ์ (Ctrl + P)</button>
+  </div>
+
+  <!-- แผ่นที่ 1: สีส้ม (1 T-VEE) & สีเขียว (5 T-VEE) -->
+  <div class="a4-page">
+    <div class="card-print"><img src="print_pilot-ora-10001.svg" alt="Card"></div>
+    <div class="card-print"><img src="print_pilot-ora-10002.svg" alt="Card"></div>
+    <div class="card-print"><img src="print_pilot-gre-10006.svg" alt="Card"></div>
+  </div>
+
+  <!-- แผ่นที่ 2: สีเขียว (5 T-VEE) & สีฟ้า (20 T-VEE) -->
+  <div class="a4-page">
+    <div class="card-print"><img src="print_pilot-gre-10007.svg" alt="Card"></div>
+    <div class="card-print"><img src="print_pilot-blu-10011.svg" alt="Card"></div>
+    <div class="card-print"><img src="print_pilot-blu-10012.svg" alt="Card"></div>
+  </div>
+
+  <!-- แผ่นที่ 3: สีม่วง (100 T-VEE) -->
+  <div class="a4-page">
+    <div class="card-print"><img src="print_pilot-pur-10016.svg" alt="Card"></div>
+    <div class="card-print"><img src="print_pilot-pur-10017.svg" alt="Card"></div>
+    <div class="card-print"><img src="print_pilot-pur-10018.svg" alt="Card"></div>
+  </div>
+</body>
+</html>
