@@ -1,7 +1,7 @@
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
-describe("Time-Value Ecosystem (The 4 Pillars Test)", function () {
+describe("Time-Value Ecosystem (The 4 Pillars Test with Chainlink Interface)", function () {
   let timeVault, coinX;
   let owner, userAlice, hunterBob;
 
@@ -13,9 +13,9 @@ describe("Time-Value Ecosystem (The 4 Pillars Test)", function () {
     coinX = await TVEEToken.deploy(owner.address);
     await coinX.waitForDeployment();
 
-    // 2. Deploy TimeValueVault
+    // 2. Deploy TimeValueVault (ส่ง ZeroAddress สำหรับ PriceFeed ในโหมด Local Test)
     const TimeValueVault = await ethers.getContractFactory("TimeValueVault");
-    timeVault = await TimeValueVault.deploy(await coinX.getAddress(), ethers.ZeroAddress);
+    timeVault = await TimeValueVault.deploy(await coinX.getAddress(), ethers.ZeroAddress, ethers.ZeroAddress);
     await timeVault.waitForDeployment();
   });
 
