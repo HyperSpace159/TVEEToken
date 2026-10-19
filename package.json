@@ -1,0 +1,24 @@
+{
+  "name": "t-vee-protocol",
+  "version": "1.0.0",
+  "description": "Global Open-Source Financial Protocol: Decentralized Operating System & Numberless Offline Cash Architecture",
+  "main": "index.js",
+  "scripts": {
+    "test": "hardhat test",
+    "compile": "hardhat compile"
+  },
+  "keywords": [
+    "solidity",
+    "freigeld",
+    "demurrage",
+    "offline-cash",
+    "jab-code",
+    "rebase"
+  ],
+  "author": "T-VEE Community",
+  "license": "MIT",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "hardhat": "^2.29.1"
+  }
+}

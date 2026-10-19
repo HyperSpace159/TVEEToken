@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" width="800" height="380">
+  <rect x="10" y="10" width="780" height="360" rx="16" fill="#F8F9FA" stroke="#00897B" stroke-width="3"/>
+  <rect x="22" y="22" width="756" height="336" rx="12" fill="none" stroke="#B0BEC5" stroke-dasharray="6 4" stroke-width="1"/>
+
+  <text x="45" y="60" font-family="Arial, sans-serif" font-weight="bold" font-size="20" fill="#263238">OFFLINE TRANSFER CHAIN (PROOF OF HANDOVER)</text>
+  <text x="45" y="85" font-family="Arial, sans-serif" font-size="12" fill="#546E7A">Record physical transactions to claim 10x Slashing Bounty if counterfeit double-spending is detected.</text>
+
+  <!-- Table Headers -->
+  <rect x="45" y="110" width="710" height="35" fill="#00897B" rx="4"/>
+  <text x="65" y="133" font-family="Arial, sans-serif" font-weight="bold" font-size="13" fill="#FFFFFF">Seq</text>
+  <text x="135" y="133" font-family="Arial, sans-serif" font-weight="bold" font-size="13" fill="#FFFFFF">Sender ID / Signature</text>
+  <text x="375" y="133" font-family="Arial, sans-serif" font-weight="bold" font-size="13" fill="#FFFFFF">Receiver ID / Signature</text>
+  <text x="605" y="133" font-family="Arial, sans-serif" font-weight="bold" font-size="13" fill="#FFFFFF">Date &amp; Location</text>
+
+  <!-- Rows -->
+  
+  <rect x="45" y="145" width="710" height="40" fill="#FFFFFF" stroke="#CFD8DC"/>
+  <text x="70" y="170" font-family="Arial, sans-serif" font-size="13" fill="#455A64">#1</text>
+  
+
+  <rect x="45" y="185" width="710" height="40" fill="#F1F3F4" stroke="#CFD8DC"/>
+  <text x="70" y="210" font-family="Arial, sans-serif" font-size="13" fill="#455A64">#2</text>
+  
+
+  <rect x="45" y="225" width="710" height="40" fill="#FFFFFF" stroke="#CFD8DC"/>
+  <text x="70" y="250" font-family="Arial, sans-serif" font-size="13" fill="#455A64">#3</text>
+  
+
+  <rect x="45" y="265" width="710" height="40" fill="#F1F3F4" stroke="#CFD8DC"/>
+  <text x="70" y="290" font-family="Arial, sans-serif" font-size="13" fill="#455A64">#4</text>
+  
+
+  <text x="45" y="335" font-family="monospace" font-size="11" fill="#78909C">Anchor Hash: 0x80b79f047c12ac7f6e100f27bfcf620bb1f98e7781ced1765d05fe6de2dc06d1</text>
+</svg>
