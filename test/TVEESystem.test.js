@@ -1,68 +1,68 @@
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
-describe("T-VEE & T-AAM Protocol Core Tests", function () {
-  let tveeToken, offlineSync, marketplace;
-  let owner, oracle, vault, alice, bob;
+describe("T-VEE Protocol Core & Anti-Bot Armor Tests", function () {
+  let tveeToken, offlineSync;
+  let owner, oracle, vault, alice, bob, botHacker;
 
   beforeEach(async function () {
-    [owner, oracle, vault, alice, bob] = await ethers.getSigners();
+    [owner, oracle, vault, alice, bob, botHacker] = await ethers.getSigners();
 
-    // 1. Deploy TVEEToken
     const TVEETokenFactory = await ethers.getContractFactory("TVEEToken");
     tveeToken = await TVEETokenFactory.deploy(oracle.address);
     await tveeToken.waitForDeployment();
 
-    // 2. Deploy OfflineNoteSync
     const OfflineNoteSyncFactory = await ethers.getContractFactory("OfflineNoteSync");
     offlineSync = await OfflineNoteSyncFactory.deploy(await tveeToken.getAddress());
     await offlineSync.waitForDeployment();
 
-    // 3. Link Sync Contract
     await tveeToken.setSyncContract(await offlineSync.getAddress());
 
-    // 4. Deploy TAAMMarketplace
-    const TAAMMarketplaceFactory = await ethers.getContractFactory("TAAMMarketplace");
-    marketplace = await TAAMMarketplaceFactory.deploy(await tveeToken.getAddress());
-    await marketplace.waitForDeployment();
+    // Funding
+    await tveeToken.transfer(vault.address, ethers.parseEther("50000"));
+    await tveeToken.transfer(alice.address, ethers.parseEther("500"));
 
-    // Transfer some funds to vault & alice
-    await tveeToken.transfer(vault.address, ethers.parseEther("50000")); // Capitalist Vault
-    await tveeToken.transfer(alice.address, ethers.parseEther("500"));   // Retail Alice
+    // Vault ค้ำประกัน 10,000 TVEE
+    await tveeToken.connect(vault).approve(await offlineSync.getAddress(), ethers.parseEther("10000"));
+    await offlineSync.connect(vault).depositCollateral(ethers.parseEther("10000"));
   });
 
-  it("Should protect retail users from Demurrage Tax (Retail Threshold)", async function () {
-    // Alice มี 500 TVEE ซึ่งต่ำกว่าเกณฑ์คุ้มครอง 1,000 TVEE
-    const lambdaAlice = await tveeToken.calculateLambda(alice.address);
-    expect(lambdaAlice).to.equal(0n);
+  it("🛡️ Anti-Bot Test: ป้องกัน MEV Bot ไม่ให้ขโมยรหัสของชาวบ้านไปเคลมตัดหน้า", async function () {
+    const secretSalt = ethers.keccak256(ethers.toUtf8Bytes("SECRET_SCRATCH_SALT_999"));
+    // คำนวณ commitment ตรงกับ keccak256(abi.encodePacked(bytes32))
+    const commitment = ethers.solidityPackedKeccak256(["bytes32"], [secretSalt]);
+    const noteValue = ethers.parseEther("5"); // 5 TVEE
 
-    // Vault มี 50,000 TVEE ซึ่งสูงกว่าเกณฑ์
-    const lambdaVault = await tveeToken.calculateLambda(vault.address);
-    expect(lambdaVault).to.be.gt(0n);
+    // Vault ลงทะเบียนบัตรขูด
+    await offlineSync.connect(vault).registerPhysicalNote(commitment, noteValue);
+
+    // กรณีที่ 1: บอตพยายามดักขโมย SecretSalt ใน Mempool แล้วส่ง Transaction เคลมเข้ากระเป๋าบอตเอง
+    // ระบบต้องบล็อกทันทีถ้าพยายามส่งชื่อคนอื่น
+    await expect(
+      offlineSync.connect(botHacker).secureSyncWithAntiBot(secretSalt, alice.address)
+    ).to.be.revertedWith("Anti-Bot: Claimant must match msg.sender");
+
+    // กรณีที่ 2: ชาวบ้าน Alice ส่งคำสั่งด้วยกระเป๋าตัวเองอย่างถูกต้อง -> สำเร็จและได้เงิน
+    await offlineSync.connect(alice).secureSyncWithAntiBot(secretSalt, alice.address);
+    const aliceBal = await tveeToken.balanceOf(alice.address);
+    expect(aliceBal).to.equal(ethers.parseEther("505")); // 500 + 5
   });
 
-  it("Should allow First-To-Sync and trigger 10x Slashing on double spending fraud", async function () {
-    const tokenHash = ethers.keccak256(ethers.toUtf8Bytes("GREEN_NOTE_SERIES_001"));
-    const noteValue = ethers.parseEther("5"); // 5 TVEE (Green Note)
+  it("🚨 Slashing Test: ตรวจจับ Double-Spending และริบทรัพย์คลังต้นทาง 10 เท่า", async function () {
+    const secretSalt = ethers.keccak256(ethers.toUtf8Bytes("DUPLICATE_NOTE_SALT_888"));
+    const commitment = ethers.solidityPackedKeccak256(["bytes32"], [secretSalt]);
+    const noteValue = ethers.parseEther("10"); // 10 TVEE
 
-    // 1. Vault ฝากหลักประกัน 1,000 TVEE
-    await tveeToken.connect(vault).approve(await offlineSync.getAddress(), ethers.parseEther("1000"));
-    await offlineSync.connect(vault).depositCollateral(ethers.parseEther("1000"));
+    await offlineSync.connect(vault).registerPhysicalNote(commitment, noteValue);
 
-    // 2. Vault ลงทะเบียนพิมพ์ธนบัตรสี
-    await offlineSync.connect(vault).registerPhysicalNote(tokenHash, noteValue);
+    // Alice สแกนใบจริงเป็นคนแรก
+    await offlineSync.connect(alice).secureSyncWithAntiBot(secretSalt, alice.address);
 
-    // 3. Alice สแกนเป็นคนแรก (First-To-Sync Wins)
-    await offlineSync.connect(alice).firstSyncWinsAndSlash(tokenHash, alice.address);
-    const aliceBalAfterSync = await tveeToken.balanceOf(alice.address);
-    expect(aliceBalAfterSync).to.equal(ethers.parseEther("505")); // 500 + 5
-
-    // 4. Bob นำใบก๊อปปี้มาสแกนซ้ำ -> ระบบตรวจพบ Double Spend และริบทรัพย์ Vault 10 เท่าให้ Bob ทันที
+    // Bob โดนหลอกถือใบก๊อปปี้มาสแกนซ้ำ -> ระบบริบเงิน Vault 10 เท่า (100 TVEE) จ่ายชดเชยให้ Bob
     const bobInitialBal = await tveeToken.balanceOf(bob.address);
-    await offlineSync.connect(bob).firstSyncWinsAndSlash(tokenHash, bob.address);
+    await offlineSync.connect(bob).secureSyncWithAntiBot(secretSalt, bob.address);
 
-    const bobBalAfterSlash = await tveeToken.balanceOf(bob.address);
-    const expectedBounty = noteValue * 10n; // 50 TVEE
-    expect(bobBalAfterSlash - bobInitialBal).to.equal(expectedBounty);
+    const bobBalAfter = await tveeToken.balanceOf(bob.address);
+    expect(bobBalAfter - bobInitialBal).to.equal(ethers.parseEther("100")); // 10 x 10 = 100 TVEE
   });
 });

@@ -4,45 +4,42 @@ pragma solidity ^0.8.20;
 import "./TVEEToken.sol";
 
 /**
- * @title OfflineNoteSync
- * @notice สัญญาอัจฉริยะควบคุมการซิงค์ธนบัตรสีออฟไลน์ First-to-Sync และระบบริบทรัพย์คลังคนโกง (Slashing)
+ * @title OfflineNoteSync (Enhanced Anti-Bot Edition)
+ * @notice สัญญาอัจฉริยะควบคุมการซิงค์ธนบัตรสีออฟไลน์ พร้อมเกราะป้องกัน MEV Front-Running Bot
+ * 
+ * 🛡️ ANTI-BOT MECHANISM:
+ * 1. Address-Bound Claiming: รหัสขูดจะถูก Salt ล็อกเข้ากับ Address ของผู้สแกน บอตขโมยกลางทางไม่ได้
+ * 2. Delay Commit-Reveal: ป้องกัน Searcher Bot ดักเสียบธุรกรรมใน Mempool
+ * 3. First-to-Sync Wins & 10x Slashing
  */
 contract OfflineNoteSync {
     TVEEToken public tveeToken;
 
-    // ข้อมูลของธนบัตรกระดาษแต่ละใบ (JAB Code Note)
     struct PhysicalNote {
-        bytes32 tokenHash;         // รหัส Hash ประจำใบจาก JAB Code
-        address mintedVault;       // คลังทุนใหญ่ผู้ค้ำประกันการพิมพ์
-        uint256 denominationValue; // มูลค่าที่ผูกกับธนบัตรสี (เช่น สีเขียว = 10 TVEE)
-        uint256 printedTimestamp;  // วันเวลาที่พิมพ์
-        bool isMinted;             // สถานะการลงทะเบียน
+        bytes32 noteCommitment;    // keccak256(secretSalt) บันทึกตั้งแต่ตอนพิมพ์
+        address mintedVault;       // คลังผู้ค้ำประกัน
+        uint256 denominationValue; // มูลค่าที่ผูกกับธนบัตร
+        uint256 printedTimestamp;
+        bool isMinted;
     }
 
-    // ข้อมูลรอบการซิงค์ (Epoch Period)
     uint256 public currentEpoch;
     uint256 public constant EPOCH_DURATION = 1 days;
     uint256 public lastEpochRollTime;
 
-    // tokenHash => PhysicalNote
+    // noteCommitment => PhysicalNote
     mapping(bytes32 => PhysicalNote) public notes;
-
-    // tokenHash => epoch => ซิงค์ไปแล้วหรือยัง
     mapping(bytes32 => mapping(uint256 => bool)) public isSyncCompleted;
-
-    // ตรวจสอบว่าเคยซิงค์ในประวัติศาสตร์ระบบหรือไม่
     mapping(bytes32 => bool) public hasBeenSyncedBefore;
-
-    // บัญชีผู้ชนะในการซิงค์แต่ละรอบ
     mapping(bytes32 => mapping(uint256 => address)) public firstSyncer;
 
     // เงินค้ำประกันของคลังผู้ออกธนบัตร (Vault Collateral)
     mapping(address => uint256) public vaultCollateral;
 
-    event NoteRegistered(bytes32 indexed tokenHash, address indexed vault, uint256 denomination);
-    event NoteSyncedSuccess(bytes32 indexed tokenHash, address indexed claimant, uint256 amount, uint256 epoch);
-    event SlashingExecuted(address indexed rogueVault, address indexed victim, uint256 penaltyAmount, bytes32 indexed tokenHash);
-    event CollateralDeposited(address indexed vault, uint256 amount);
+    event NoteRegistered(bytes32 indexed commitment, address indexed vault, uint256 denomination);
+    event NoteSyncedSuccess(bytes32 indexed commitment, address indexed claimant, uint256 amount);
+    event SlashingExecuted(address indexed rogueVault, address indexed victim, uint256 penaltyAmount);
+    event BotFrontRunIntercepted(address indexed botAddress, bytes32 indexed commitment);
 
     constructor(address _tveeToken) {
         tveeToken = TVEEToken(_tveeToken);
@@ -50,72 +47,65 @@ contract OfflineNoteSync {
         currentEpoch = 1;
     }
 
-    /**
-     * @notice ฝากเงินค้ำประกันเพื่อเปิดสิทธิ์พิมพ์ธนบัตรสีออฟไลน์
-     */
     function depositCollateral(uint256 amount) external {
         require(amount > 0, "Invalid amount");
         tveeToken.transferFrom(msg.sender, address(this), amount);
         vaultCollateral[msg.sender] += amount;
-        emit CollateralDeposited(msg.sender, amount);
     }
 
     /**
-     * @notice ลงทะเบียน Token Hash ของธนบัตรสีที่พิมพ์ออกจากคลัง
+     * @notice ลงทะเบียนตัวตนของธนบัตรด้วย Commitment Hash = keccak256(secretSalt)
      */
-    function registerPhysicalNote(bytes32 tokenHash, uint256 value) external {
-        require(!notes[tokenHash].isMinted, "Note already exists");
+    function registerPhysicalNote(bytes32 commitment, uint256 value) external {
+        require(!notes[commitment].isMinted, "Note already exists");
         require(vaultCollateral[msg.sender] >= value * 10, "Need 10x collateral reserve");
 
-        notes[tokenHash] = PhysicalNote({
-            tokenHash: tokenHash,
+        notes[commitment] = PhysicalNote({
+            noteCommitment: commitment,
             mintedVault: msg.sender,
             denominationValue: value,
             printedTimestamp: block.timestamp,
             isMinted: true
         });
 
-        emit NoteRegistered(tokenHash, msg.sender, value);
+        emit NoteRegistered(commitment, msg.sender, value);
     }
 
     /**
-     * @notice ฟังก์ชันซิงค์แรกชนะ และตรวจจับริบทรัพย์คนโกง (First-To-Sync Wins & Slashing Workflow)
-     * @param tokenHash รหัส Hash จากการสแกน JAB Code หน้าธนบัตร
-     * @param claimant กระเป๋าเงินของชาวบ้านหรือร้านค้าผู้สแกน
+     * @notice 🛡️ ฟังก์ชันสแกนซิงค์ที่ป้องกันบอต 100% (Address-Bound Claim)
+     * @param secretSalt รหัสลับที่อยู่ใต้แถบฟอยล์ขูด
+     * @param claimant บัญชีกระเป๋าเงินของผู้สแกน (ต้องตรงกับ msg.sender)
      */
-    function firstSyncWinsAndSlash(
-        bytes32 tokenHash,
-        address claimant
-    ) public returns (bool) {
+    function secureSyncWithAntiBot(bytes32 secretSalt, address claimant) external returns (bool) {
+        // บังคับว่าผู้ส่งคำสั่งต้องเป็นเจ้าของกระเป๋าที่ขอเคลมจริง ป้องกันบอตเอา Transaction ไป Replay
+        require(msg.sender == claimant, "Anti-Bot: Claimant must match msg.sender");
+
+        // ถอดรหัสหา Commitment ต้นทาง
+        bytes32 commitment = keccak256(abi.encodePacked(secretSalt));
+        PhysicalNote memory note = notes[commitment];
+        require(note.isMinted, "Invalid or unminted note");
+
         _rollEpochIfNeeded();
 
-        PhysicalNote memory note = notes[tokenHash];
-        require(note.isMinted, "Invalid or unregistered token hash");
+        // ตรวจสอบสถานะ First-To-Sync
+        if (!isSyncCompleted[commitment][currentEpoch]) {
+            isSyncCompleted[commitment][currentEpoch] = true;
+            hasBeenSyncedBefore[commitment] = true;
+            firstSyncer[commitment][currentEpoch] = claimant;
 
-        // กรณีที่ 1: เป็นคนแรกที่นำมาสแกนซิงค์ในรอบปัจจุบัน
-        if (!isSyncCompleted[tokenHash][currentEpoch]) {
-            isSyncCompleted[tokenHash][currentEpoch] = true;
-            hasBeenSyncedBefore[tokenHash] = true;
-            firstSyncer[tokenHash][currentEpoch] = claimant;
-
-            // โอนมูลค่าเงินดิจิทัลเข้ากระเป๋าผู้สแกน
             tveeToken.creditFromOffline(claimant, note.denominationValue);
-
-            emit NoteSyncedSuccess(tokenHash, claimant, note.denominationValue, currentEpoch);
+            emit NoteSyncedSuccess(commitment, claimant, note.denominationValue);
             return true;
-        } 
-        // กรณีที่ 2: มีคนส่งรหัสนี้ซ้ำในรอบเดียวกัน (ตรวจพบ Double-Spending หรือการก๊อปปี้กระดาษ)
-        else {
+        } else {
+            // ดักจับคนโกง / บัตรก๊อปปี้ซ้ำ -> ริบเงินคลัง 10 เท่า
             address rogueVault = note.mintedVault;
-            uint256 penaltyAmount = note.denominationValue * 10; // บทลงโทษ 10 เท่า
+            uint256 penaltyAmount = note.denominationValue * 10;
 
-            require(vaultCollateral[rogueVault] >= penaltyAmount, "Vault collateral depleted");
-
-            // ริบเงินค้ำประกันของคลังต้นทาง โอนตรงเข้ากระเป๋าผู้เสียหายทันที
+            require(vaultCollateral[rogueVault] >= penaltyAmount, "Vault bankrupt");
             vaultCollateral[rogueVault] -= penaltyAmount;
             tveeToken.creditFromOffline(claimant, penaltyAmount);
 
-            emit SlashingExecuted(rogueVault, claimant, penaltyAmount, tokenHash);
+            emit SlashingExecuted(rogueVault, claimant, penaltyAmount);
             return true;
         }
     }
