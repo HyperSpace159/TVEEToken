@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>T-VEE Protocol - Offline Cash & JAB Code Gallery</title>
+  <title>T-VEE Protocol - Scratch Card Offline Cash Showcase</title>
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -31,6 +31,13 @@
       color: #fff;
       margin-bottom: 20px;
     }
+    .concept-box {
+      background: #161b22;
+      border-left: 4px solid #58a6ff;
+      padding: 16px;
+      margin-bottom: 25px;
+      border-radius: 0 8px 8px 0;
+    }
     .note-card {
       background: #161b22;
       border: 1px solid #30363d;
@@ -38,91 +45,101 @@
       padding: 24px;
       margin-bottom: 30px;
     }
-    .note-card h2 {
-      margin-top: 0;
-      color: #f0f6fc;
-    }
-    .preview-box {
-      display: flex;
-      flex-direction: column;
+    .preview-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: 20px;
       margin-top: 15px;
     }
+    @media (max-width: 800px) {
+      .preview-grid { grid-template-columns: 1fr; }
+    }
     .preview-box img {
       width: 100%;
-      max-width: 800px;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
     }
-    .meta-tag {
-      font-family: monospace;
-      background: #0d1117;
-      padding: 6px 12px;
-      border-radius: 6px;
-      border: 1px solid #30363d;
-      color: #79c0ff;
-      display: inline-block;
-      margin-top: 10px;
+    .label {
+      font-weight: bold;
+      margin-bottom: 8px;
     }
+    .intact-tag { color: #56d364; }
+    .scratched-tag { color: #f85149; }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>🌐 T-VEE &amp; T-AAM Protocol: Physical Currency Showcase</h1>
-    <div class="badge">Version 1.0.0 • Code is Law • Zero Tech Barrier</div>
-    <p>สถาปัตยกรรมธนบัตรสีไร้ตัวเลข (Denomination-Free Architecture) พร้อมเมทริกซ์พิกเซลสี JAB Code และตารางสายโซ่การส่งมอบออฟไลน์</p>
+    <h1>🎟️ T-VEE Scratch Card: สถาปัตยกรรมธนบัตรสีแบบบัตรขูด</h1>
+    <div class="badge">Version 1.1.0 • Visual Proof of Unspent • Offline Trust 100%</div>
 
-    <!-- 1. Amber Orange -->
-    <div class="note-card">
-      <h2>🟠 1 T-VEE — Amber Orange</h2>
-      <p>สำหรับการดำรงชีพพื้นฐาน: ซื้อพริก, ไข่ไก่, ค่าวินมอเตอร์ไซค์, อาหารสดหน่วยเล็ก</p>
-      <div class="preview-box">
-        <div><strong>ด้านหน้า (Front Side - JAB Code):</strong></div>
-        <img src="tvee_note_orange_front.svg" alt="Orange Front">
-        <div><strong>ด้านหลัง (Back Side - Transfer Chain):</strong></div>
-        <img src="tvee_note_orange_back.svg" alt="Orange Back">
-      </div>
-      <div class="meta-tag">CMYK: C:0 M:70 Y:100 K:0 | Hex: #FF6F00</div>
+    <div class="concept-box">
+      <strong>💡 ปรัชญาการออกแบบบัตรขูดหมุนเวียน (Proof of Unspent):</strong>
+      <ul>
+        <li><strong>ก่อนขูด (แถบฟอยล์สีเงินเรียบเนียน):</strong> ชาวบ้านมั่นใจได้ 100% ด้วยตาเปล่าว่า <em>"ไม่มีใครแอบสแกนซิงค์ไปก่อน"</em> สามารถส่งมอบ ทอนเงิน และหมุนเวียนในตลาดสดได้เรื่อย ๆ โดยไม่ต้องต่อเน็ต</li>
+        <li><strong>หลังขูด (เปิดเผย JAB Code):</strong> ผู้ถือขูดออกเมื่อต้องการเปลี่ยนเป็นเงินดิจิทัลในมือถือ เมื่อสแกนแล้ว บัตรจะสิ้นสภาพออฟไลน์ทันที ป้องกัน Double-Spending</li>
+      </ul>
     </div>
 
-    <!-- 2. Emerald Green -->
+    <!-- 1. Emerald Green (5 T-VEE) -->
     <div class="note-card">
-      <h2>🟢 5 T-VEE — Emerald Green</h2>
-      <p>หน่วยอาหารชุมชนหลัก: ข้าวแกง, ก๋วยเตี๋ยว, อาหารจานเดียว (Universal Meal Unit)</p>
-      <div class="preview-box">
-        <div><strong>ด้านหน้า (Front Side - JAB Code):</strong></div>
-        <img src="tvee_note_green_front.svg" alt="Green Front">
-        <div><strong>ด้านหลัง (Back Side - Transfer Chain):</strong></div>
-        <img src="tvee_note_green_back.svg" alt="Green Back">
+      <h2>🟢 Emerald Green — 5 T-VEE (หน่วยอาหารจานเดียว / ข้าวแกง)</h2>
+      <div class="preview-grid">
+        <div class="preview-box">
+          <div class="label intact-tag">1. สภาพหมุนเวียนออฟไลน์ (ก่อนขูด - ฟอยล์ยังสมบูรณ์)</div>
+          <img src="scratch_note_green_intact.svg" alt="Green Intact">
+        </div>
+        <div class="preview-box">
+          <div class="label scratched-tag">2. สภาพซิงค์ออนไลน์แล้ว (หลังขูด - สแกนเข้ามือถือ)</div>
+          <img src="scratch_note_green_scratched.svg" alt="Green Scratched">
+        </div>
       </div>
-      <div class="meta-tag">CMYK: C:85 M:10 Y:60 K:0 | Hex: #00897B</div>
     </div>
 
-    <!-- 3. Cobalt Blue -->
+    <!-- 2. Amber Orange (1 T-VEE) -->
     <div class="note-card">
-      <h2>🔵 20 T-VEE — Cobalt Blue</h2>
-      <p>หน่วยวัตถุดิบและของใช้ในบ้าน: ค่ายา, สินค้าโชห่วย, เครื่องปรุงครัวเรือน</p>
-      <div class="preview-box">
-        <div><strong>ด้านหน้า (Front Side - JAB Code):</strong></div>
-        <img src="tvee_note_blue_front.svg" alt="Blue Front">
-        <div><strong>ด้านหลัง (Back Side - Transfer Chain):</strong></div>
-        <img src="tvee_note_blue_back.svg" alt="Blue Back">
+      <h2>🟠 Amber Orange — 1 T-VEE (หน่วยของสดพื้นฐาน / ค่าวินมอเตอร์ไซค์)</h2>
+      <div class="preview-grid">
+        <div class="preview-box">
+          <div class="label intact-tag">1. สภาพหมุนเวียนออฟไลน์ (ก่อนขูด)</div>
+          <img src="scratch_note_orange_intact.svg" alt="Orange Intact">
+        </div>
+        <div class="preview-box">
+          <div class="label scratched-tag">2. สภาพซิงค์ออนไลน์แล้ว (หลังขูด)</div>
+          <img src="scratch_note_orange_scratched.svg" alt="Orange Scratched">
+        </div>
       </div>
-      <div class="meta-tag">CMYK: C:95 M:60 Y:0 K:0 | Hex: #1565C0</div>
     </div>
 
-    <!-- 4. Imperial Purple -->
+    <!-- 3. Cobalt Blue (20 T-VEE) -->
     <div class="note-card">
-      <h2>🟣 100 T-VEE — Imperial Purple</h2>
-      <p>หน่วยค้าส่งและผลผลิตการเกษตร: กระสอบปุ๋ย, จ่ายค่าแรงรายวัน, การค้าส่งระหว่างตำบล</p>
-      <div class="preview-box">
-        <div><strong>ด้านหน้า (Front Side - JAB Code):</strong></div>
-        <img src="tvee_note_purple_front.svg" alt="Purple Front">
-        <div><strong>ด้านหลัง (Back Side - Transfer Chain):</strong></div>
-        <img src="tvee_note_purple_back.svg" alt="Purple Back">
+      <h2>🔵 Cobalt Blue — 20 T-VEE (หน่วยของใช้ครัวเรือน / ค่ายา)</h2>
+      <div class="preview-grid">
+        <div class="preview-box">
+          <div class="label intact-tag">1. สภาพหมุนเวียนออฟไลน์ (ก่อนขูด)</div>
+          <img src="scratch_note_blue_intact.svg" alt="Blue Intact">
+        </div>
+        <div class="preview-box">
+          <div class="label scratched-tag">2. สภาพซิงค์ออนไลน์แล้ว (หลังขูด)</div>
+          <img src="scratch_note_blue_scratched.svg" alt="Blue Scratched">
+        </div>
       </div>
-      <div class="meta-tag">CMYK: C:70 M:95 Y:0 K:0 | Hex: #6A1B9A</div>
     </div>
+
+    <!-- 4. Imperial Purple (100 T-VEE) -->
+    <div class="note-card">
+      <h2>🟣 Imperial Purple — 100 T-VEE (หน่วยค้าส่ง / ค่าแรงรายวัน)</h2>
+      <div class="preview-grid">
+        <div class="preview-box">
+          <div class="label intact-tag">1. สภาพหมุนเวียนออฟไลน์ (ก่อนขูด)</div>
+          <img src="scratch_note_purple_intact.svg" alt="Purple Intact">
+        </div>
+        <div class="preview-box">
+          <div class="label scratched-tag">2. สภาพซิงค์ออนไลน์แล้ว (หลังขูด)</div>
+          <img src="scratch_note_purple_scratched.svg" alt="Purple Scratched">
+        </div>
+      </div>
+    </div>
+
   </div>
 </body>
 </html>

@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" width="800" height="380">
+  <defs>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-opacity="0.25"/>
+    </filter>
+    <linearGradient id="silverFoil" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E0E0E0"/>
+      <stop offset="25%" stop-color="#F5F5F5"/>
+      <stop offset="50%" stop-color="#BDBDBD"/>
+      <stop offset="75%" stop-color="#EEEEEE"/>
+      <stop offset="100%" stop-color="#9E9E9E"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="10" y="10" width="780" height="360" rx="16" fill="#00897B" filter="url(#shadow)" stroke="#FFFFFF" stroke-width="3"/>
+  <rect x="22" y="22" width="756" height="336" rx="12" fill="none" stroke="#FFFFFF" stroke-dasharray="8 6" stroke-width="1.5" opacity="0.8"/>
+
+  <!-- แถบฟอยล์สีเงินปิดทับรหัส (SCRATCH-OFF FOIL LAYER) -->
+  <rect x="54" y="89" width="188" height="188" rx="8" fill="url(#silverFoil)" stroke="#757575" stroke-width="2"/>
+  
+  <text x="80" y="175" font-family="Arial, sans-serif" font-weight="900" font-size="16" fill="#424242">SCRATCH HERE</text>
+  <text x="75" y="200" font-family="Arial, sans-serif" font-weight="bold" font-size="11" fill="#616161">🔒 TO SYNC ON-CHAIN</text>
+  <text x="82" y="225" font-family="Arial, sans-serif" font-size="10" fill="#757575">(DO NOT SCRATCH</text>
+  <text x="80" y="240" font-family="Arial, sans-serif" font-size="10" fill="#757575">FOR CASH CIRCULATION)</text>
+
+  <text x="280" y="85" font-family="Arial, sans-serif" font-weight="900" font-size="28" fill="#FFFFFF">T-VEE SCRATCH NOTE</text>
+  <text x="280" y="115" font-family="Arial, sans-serif" font-weight="bold" font-size="14" fill="#FFF59D">VISUAL PROOF OF UNSPENT • OFFLINE CIRCULATION</text>
+  
+  <rect x="280" y="135" width="480" height="40" rx="6" fill="rgba(0,0,0,0.2)"/>
+  <text x="295" y="160" font-family="Arial, sans-serif" font-weight="bold" font-size="14" fill="#FFFFFF">สถานะออฟไลน์: <tspan fill="#A7FFEB">พร้อมหมุนเวียน 100% (แถบฟอยล์ยังสมบูรณ์)</tspan></text>
+  
+  <text x="280" y="210" font-family="Arial, sans-serif" font-size="15" fill="#FFFFFF">Color Grade: <tspan font-weight="bold">Emerald Green</tspan> (Community meals, street food)</text>
+  <text x="280" y="240" font-family="Arial, sans-serif" font-size="14" fill="#EEEEEE">Denomination: <tspan font-weight="bold">5 T-VEE</tspan></text>
+  <text x="280" y="270" font-family="monospace" font-size="12" fill="#E0E0E0">Vault ID: 0x71C6619082269E7e8e788e01083416F8C39D5514</text>
+
+  <line x1="280" y1="295" x2="740" y2="295" stroke="#FFFFFF" stroke-width="1" opacity="0.4"/>
+  <text x="280" y="325" font-family="Arial, sans-serif" font-weight="bold" font-size="12" fill="#FFF9C4">ตราบใดที่ฟอยล์ยังไม่ถูกขูด = มั่นใจได้ว่าไม่มีใครแอบสแกนซิงค์ไปก่อน</text>
+</svg>
