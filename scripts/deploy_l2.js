@@ -5,59 +5,80 @@ async function main() {
   const network = hre.network.name;
 
   console.log("========================================================");
-  console.log(`🌐 DEPLOYING T-VEE & THE TIME-VALUE ECOSYSTEM TO L2 [${network.toUpperCase()}]`);
+  console.log(`🌐 DEPLOYING COMPLETE T-VEE PROTOCOL TO L2 [${network.toUpperCase()}]`);
   console.log("Deployer Address:", deployer.address);
   
   const balance = await hre.ethers.provider.getBalance(deployer.address);
   console.log("Account Balance: ", hre.ethers.formatEther(balance), "ETH");
   console.log("========================================================");
 
-  // 1. Deploy TVEEToken (Coin X)
-  console.log("\n[1/4] Deploying TVEEToken (Platform Utility & Rebase Currency)...");
+  if (balance === 0n) {
+    console.warn("⚠️ Warning: Deployer balance is 0 ETH. Please get testnet ETH from a faucet before deploying.");
+    return;
+  }
+
+  // 1. Deploy TVEEToken
+  console.log("\n[1/5] Deploying TVEEToken (Core Rebase Token)...");
   const TVEEToken = await hre.ethers.getContractFactory("TVEEToken");
   const tveeToken = await TVEEToken.deploy(deployer.address);
   await tveeToken.waitForDeployment();
   const tokenAddress = await tveeToken.getAddress();
-  console.log("✅ TVEEToken deployed at:        ", tokenAddress);
+  console.log("✅ TVEEToken deployed at:             ", tokenAddress);
 
-  // 2. Deploy OfflineNoteSync (JAB Code & Slashing)
-  console.log("\n[2/4] Deploying OfflineNoteSync (JAB Code & 10x Slashing)...");
+  // 2. Deploy TieredRebaseGatekeeper
+  console.log("\n[2/5] Deploying TieredRebaseGatekeeper (O(1) Rebase & Web-of-Trust)...");
+  const Gatekeeper = await hre.ethers.getContractFactory("TieredRebaseGatekeeper");
+  const gatekeeper = await Gatekeeper.deploy();
+  await gatekeeper.waitForDeployment();
+  const gatekeeperAddress = await gatekeeper.getAddress();
+  console.log("✅ TieredRebaseGatekeeper deployed at: ", gatekeeperAddress);
+
+  // 3. Deploy OfflineNoteSync
+  console.log("\n[3/5] Deploying OfflineNoteSync (Scratch-To-Sync & 10x Slashing)...");
   const OfflineNoteSync = await hre.ethers.getContractFactory("OfflineNoteSync");
   const offlineSync = await OfflineNoteSync.deploy(tokenAddress);
   await offlineSync.waitForDeployment();
   const syncAddress = await offlineSync.getAddress();
-  console.log("✅ OfflineNoteSync deployed at:   ", syncAddress);
+  console.log("✅ OfflineNoteSync deployed at:        ", syncAddress);
 
   // Link Sync Contract to Token
   await tveeToken.setSyncContract(syncAddress);
-  console.log("🔗 TVEEToken successfully linked to OfflineNoteSync.");
+  console.log("🔗 TVEEToken linked with OfflineNoteSync.");
 
-  // 3. Deploy TAAMMarketplace (Invoice Factoring Exchange)
-  console.log("\n[3/4] Deploying TAAMMarketplace (Credit Term Invoice Factoring)...");
-  const TAAMMarketplace = await hre.ethers.getContractFactory("TAAMMarketplace");
-  const marketplace = await TAAMMarketplace.deploy(tokenAddress);
-  await marketplace.waitForDeployment();
-  const marketAddress = await marketplace.getAddress();
-  console.log("✅ TAAMMarketplace deployed at:   ", marketAddress);
-
-  // 4. Deploy TimeValueVault (4 Pillars: Dynamic Unbonding, Yield Boost, Demurrage, Time Exchange)
-  console.log("\n[4/4] Deploying TimeValueVault (The 4 Pillars Circuit Breaker)...");
+  // 4. Deploy TimeValueVault (The 4 Pillars)
+  console.log("\n[4/5] Deploying TimeValueVault (Dynamic Unbonding & Time Exchange)...");
   const TimeValueVault = await hre.ethers.getContractFactory("TimeValueVault");
-  // ให้ ETH เป็น Collateral ตัวอย่าง (address 0)
   const timeVault = await TimeValueVault.deploy(tokenAddress, hre.ethers.ZeroAddress);
   await timeVault.waitForDeployment();
   const vaultAddress = await timeVault.getAddress();
-  console.log("✅ TimeValueVault deployed at:    ", vaultAddress);
+  console.log("✅ TimeValueVault deployed at:         ", vaultAddress);
+
+  // 5. Deploy InstitutionalVault3of5
+  console.log("\n[5/5] Deploying InstitutionalVault3of5 (3-in-5 Multi-Sig Treasury)...");
+  const Vault3of5 = await hre.ethers.getContractFactory("InstitutionalVault3of5");
+  // กำหนด 5 บัญชีเริ่มต้น (จำลองจาก deployer)
+  const signers = [
+    deployer.address,
+    "0x71C6619082269E7e8e788e01083416F8C39D5514",
+    "0x2B5AD5c4795c026514f8317c7a215E218DcCD6cF",
+    "0x6813Eb9362372EEF6200f3b1dbC3f819671cBA69",
+    "0x1efF47bc3a10a45D4B230B5d10E37751FE6AA718"
+  ];
+  const instVault = await Vault3of5.deploy(signers);
+  await instVault.waitForDeployment();
+  const instVaultAddress = await instVault.getAddress();
+  console.log("✅ InstitutionalVault3of5 deployed at: ", instVaultAddress);
 
   console.log("\n========================================================");
-  console.log("🎉 ALL 4 CORE CONTRACTS DEPLOYED SUCCESSFULLY ON L2!");
+  console.log("🎉 ALL 5 CONTRACTS SUCCESSFULLY DEPLOYED TO L2!");
   console.log("========================================================");
   console.log(JSON.stringify({
     network: network,
     TVEEToken: tokenAddress,
+    TieredRebaseGatekeeper: gatekeeperAddress,
     OfflineNoteSync: syncAddress,
-    TAAMMarketplace: marketAddress,
-    TimeValueVault: vaultAddress
+    TimeValueVault: vaultAddress,
+    InstitutionalVault3of5: instVaultAddress
   }, null, 2));
 }
 
