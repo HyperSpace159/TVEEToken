@@ -9,13 +9,7 @@
 ## Abstract
 A purely peer-to-peer version of electronic cash and physical circulation would allow online and offline payments to be sent directly from one party to another without going through a financial institution or requiring continuous internet connectivity. We propose a solution to the liquidity hoarding and financial death-spiral problem by synthesizing **Silvio Gesell’s Free-Money (Freigeld)** theory with cryptographic **Time-Value Tokenization**. Physical commerce is conducted via **denomination-free color-coded tokens** protected by an opaque scratch-off matrix (JAB Code), providing a purely visual **Proof-of-Unspent** for zero-tech offline trade. 
 
-To prevent run-on-the-bank collapses and speculative capital stagnation, the underlying Layer-2 decentralized protocol implements an automated **4-Pillar Time-Elastic Circuit Breaker**: 
-1. **Dynamic Unbonding Period:** exponentially delays withdrawals during panic dumps to freeze collateral runaways;
-2. **Yield Boost & Debt-Cancellation:** converts locked durations into elevated yields and algorithmic debt write-offs to induce buying pressure;
-3. **Dynamic Demurrage Tax:** burns idle token surpluses when market velocity drops or circulating supply overflows;
-4. **Time Tokenization & Secondary Exchange:** tokenizes waiting periods into discounted time vouchers, ensuring instant liquidity through decentralized discount hunters.
-
-The network is secured by a crowd-enforced **First-to-Sync Wins** rule combined with an algorithmic **10x Slashing Bounty**, rendering physical counterfeiting economically catastrophic.
+To eliminate systemic vulnerabilities, front-running bots, and whale capital tax evasion, the protocol implements a **Zero-Bot Architecture** operating at $O(1)$ computational complexity. The front line is defended by a **3-Layer Gatekeeper Layer** enforcing Zero-Knowledge Proof-of-Humanity (Iris Nullifier Hash) bound to an ancestral **Web-of-Trust Referral Code**. Simultaneously, on-chain equilibrium is maintained by an automated **4-Pillar Time-Elastic Circuit Breaker** and a **3-in-5 Institutional Multi-Signature Vault** governing primary collateral across global custodial jurisdictions.
 
 ---
 
@@ -25,6 +19,7 @@ Commerce on the Internet and in modern economies has come to rely almost exclusi
 - **The Fiat Illusion & Inflation:** Cantillon effects enrich financial intermediaries at the expense of base-level wage earners and retail merchants.
 - **The Technology Chasm:** Billions of everyday citizens, elderly merchants, and unbanked populations cannot navigate private keys, seed phrases, or unstable internet connections.
 - **The Death Spiral Vulnerability in Algorithmic Finance:** As observed during catastrophic historical runs (e.g., Terra/LUNA), panic liquidations deplete liquidity pools faster than programmatic rebalancing can react.
+- **The Sybil Attack Dilemma:** In traditional progressive tax structures, capital whales utilize automated scripts to fragment funds across thousands of dummy accounts to evade demurrage thresholds.
 
 What is needed is an offline-accessible, denomination-free physical medium that functions seamlessly in local street markets, anchored to a decentralized mathematical ledger where capital is penalised for standing idle, and panic liquidations are automatically dampened by time-dilation equations.
 
@@ -33,9 +28,9 @@ What is needed is an offline-accessible, denomination-free physical medium that 
 +---------------------------------------+      +------------------------------------+
 |  Numberless Color Note (Visual Value) |      | Layer-2 Rollup (Validium/ZK-Proof) |
 |  +---------------------------------+  |      |                                    |
-|  | Opaque Silver Scratch Foil      |  |=====>| Dynamic Demurrage Tax: e^(-λ·Δt)   |
-|  | (Hides High-Density JAB Code)   |  | Sync | Dynamic Unbonding Circuit Breaker  |
-|  +---------------------------------+  |      | Time-Voucher Factoring Marketplace |
+|  | Opaque Silver Scratch Foil      |  |=====>| Dynamic Global Rebase: globalK(t)  |
+|  | (Hides High-Density JAB Code)   |  | Sync | Gatekeeper Web-of-Trust Layer      |
+|  +---------------------------------+  |      | 3-in-5 Institutional Multi-Sig     |
 +---------------------------------------+      +------------------------------------+
 ```
 
@@ -60,7 +55,77 @@ To solve offline double-spending without requiring internet connectivity:
 
 ---
 
-## 3. Mathematical Core & The 4-Pillar Time Ecosystem
+## 3. The Front-Line Defense: 3-Layer Gatekeeper Layer
+To thwart capital whales attempting Sybil attacks (splitting massive treasuries into thousands of sub-accounts to falsely qualify for the Retail Threshold), the system erects a **3-Layer Gatekeeper Armor**:
+
+```
+[ Whale Capitalist / Automated Bot Swarm ]
+                     │
+                     ▼
+┌────────────────────────────────────────────────────────┐
+│  Layer 1: Web-of-Trust Referral Code Verification      │
+│  - Candidate accounts MUST possess an invitation code   │
+│    from an existing, verified human ancestor.          │
+│  - Randomly generated addresses are blocked at code.   │
+└────────────────────┬───────────────────────────────────┘
+                     │
+                     ▼
+┌────────────────────────────────────────────────────────┐
+│  Layer 2: Proof-of-Humanity (Iris ZK-Nullifier Hash)   │
+│  - Exactly 1 Human = 1 Registered Account quota.       │
+│  - Duplicate iris biometric scans reject immediately.  │
+│  - Whale has 1 body -> exactly 1 retail exemption slot.│
+└────────────────────┬───────────────────────────────────┘
+                     │
+                     ▼
+┌────────────────────────────────────────────────────────┐
+│  Layer 3: Social Slashing & Velocity Circuit Breaker   │
+│  - Rogue child nominee accounts slash inviter quota.   │
+│  - Daily Velocity Cap (50,000 Coins) stops Flash-Mobs. │
+└────────────────────────────────────────────────────────┘
+```
+
+```solidity
+function registerMemberWithReferral(bytes32 nullifierHash, address referrer) external {
+    require(!isHumanVerified[msg.sender], "Gatekeeper: Already verified");
+    require(!isNullifierUsed[nullifierHash], "Gatekeeper: Iris ALREADY REGISTERED (1 Human = 1 Account)");
+    require(isHumanVerified[referrer], "Gatekeeper: Referrer must be a verified human");
+    require(referrer != msg.sender, "Gatekeeper: Cannot self-refer");
+
+    isNullifierUsed[nullifierHash] = true;
+    isHumanVerified[msg.sender] = true;
+    referredBy[msg.sender] = referrer;
+}
+```
+
+---
+
+## 4. The Zero-Bot Architecture & Real-time Global Rebase ($globalK$)
+Traditional architectures employ off-chain AI monitoring engines to scan transaction history for bot patterns—creating single points of failure vulnerable to cyber warfare. T-VEE replaces all external bots with an immutable, on-chain **$O(1)$ Real-Time Rebase Algorithm**:
+
+$$\mathbf{\text{Actual Balance}(t) = \text{Base Balance} \times globalK(t)}$$
+
+$$\mathbf{globalK(t) = 1.0 - \left( \frac{S_{\text{current}} - S_{\text{target}}}{S_{\text{max}} - S_{\text{target}}} \right)^2 \times \text{Max Penalty}}$$
+
+* $S_{\text{target}}$ = Baseline safe circulating supply ($10,000,000\text{ Coins}$).
+* $S_{\text{max}}$ = Extreme liquidity crisis ceiling ($20,000,000\text{ Coins}$).
+* $\text{Max Penalty}$ = Maximum algorithmic compression factor ($5\%\text{ per epoch}$).
+
+### Live Stress-Test Dynamic Matrix
+
+| Circulating Supply ($S_{\text{current}}$) | Mathematical Index ($globalK$) | Retail Account (50,000 Coins) | Whale Account (1,000,000 Coins) | System Equilibrium State |
+|---|---|---|---|---|
+| **8,000,000 Coins** | `1.0000` (Baseline) | **50,000 Coins (Full)** | **1,000,000 Coins (Full)** | 🟢 System Safe. Zero decay. |
+| **12,000,000 Coins** | `0.9992` | **50,000 Coins (Full)** | **999,200 Coins (-800)** | 🟡 Mild Surplus: Whale compresses. |
+| **15,000,000 Coins** | `0.9875` | **50,000 Coins (Full)** | **987,500 Coins (-12,500)** | 🟠 Elevated: Automatic dampening active. |
+| **19,000,000 Coins** | `0.9595` | **50,000 Coins (Full)** | **959,500 Coins (-40,500)** | 🔴 Acute Runaway: 4% deflationary burn. |
+| **20,000,000 Coins** | `0.9500` (Ceiling) | **50,000 Coins (Full)** | **950,000 Coins (-50,000)** | ⚠️ Absolute Circuit: Whales forced to repay. |
+
+**The Retail Sanctuary:** Verified retail accounts holding under $100,000\text{ Coins}$ have $globalK$ permanently locked at `1.0` in bytecode. Their balance never degrades regardless of macro volatility.
+
+---
+
+## 5. The 4-Pillar Time Ecosystem (Circuit Breakers)
 
 ```mermaid
 flowchart TD
@@ -76,49 +141,43 @@ flowchart TD
     P4 -->|Immediate Cash for Urgent Users| LIQ["Zero-Bank Liquidity Engine"]
 ```
 
-### 3.1 Pillar 1: Dynamic Unbonding (Exponential Circuit Breaker)
-Traditional protocols enforce rigid unbonding windows (e.g., 7 or 14 days), allowing liquidations to outpace liquidity replenishment during a bank run. T-VEE employs an automated exponential time-delay function:
-
+### 5.1 Pillar 1: Dynamic Unbonding (Exponential Circuit Breaker)
 $$\mathbf{T_{\text{unbonding}}(P) = T_{\text{min}} + (T_{\text{max}} - T_{\text{min}}) \times \left(1 - \frac{P}{P_{\text{base}}}\right)^{\alpha}}$$
+When spot price drops 50%, unbonding extends automatically from 7 to **~36 days**; under a 90% collapse, delay hits **~77.8 days**, and reaches **90 days** at zero price. Bank runs are mathematically neutralized.
 
-* $P_{\text{base}}$ = Benchmark equilibrium price ($1.00 USD).
-* $P$ = Current oracle spot price of the native token.
-* $T_{\text{min}}$ = Baseline normal delay (7 days / 604,800 seconds).
-* $T_{\text{max}}$ = Total system freeze ceiling (90 days / 7,776,000 seconds).
-* $\alpha$ = Elastic sensitivity coefficient ($\alpha = 1.5$).
+### 5.2 Pillar 2: Yield Boost & Algorithmic Debt-Cancellation
+Delayed holders earn compounding yield bonuses in Coin X. Furthermore, users can purchase discounted Coin X on secondary markets and cancel primary collateral debts at a 1:1 nominal book value, creating structural buying pressure during downturns.
 
-When panic occurs and price drops 50%, unbonding extends automatically to **~36 days**; under a 90% collapse, the unbonding period hits **~77.8 days**, and reaches **90 days** at zero price. Runaways are mathematically impossible.
-
-### 3.2 Pillar 2: Yield Boost & Algorithmic Debt-Cancellation
-To prevent user disgruntlement during extended unbonding and create instant buying pressure:
-- Users whose assets are delayed receive an accelerated compounding yield bonus in Coin X proportional to delay duration:
-$$\text{Yield Boost} = \frac{\Delta T_{\text{unbonding}}}{T_{\text{max}}} \times \text{Base Yield}$$
-- The protocol enables direct on-chain **Debt-Cancellation**: Users who borrowed against their primary collateral can purchase depressed Coin X tokens from external exchanges and burn them against their debt at a 1:1 book value. This induces an overwhelming external bid floor.
-
-### 3.3 Pillar 3: Dynamic Demurrage Tax (Silvio Gesell Formulation)
-To eliminate capital hoarding and hyper-inflationary overflows, tokens held outside staking vaults degrade over time:
-
+### 5.3 Pillar 3: Dynamic Demurrage Tax
+Tokens hoarded outside registered staking facilities decay continuously:
 $$\mathbf{V_{\text{actual}}(t) = V_{\text{base}} \times e^{-\lambda(B) \cdot \Delta t}}$$
 
-Where the decay coefficient $\lambda(B)$ scales progressively with balance $B$:
-
-$$\lambda(B) = \lambda_0 \times \left(\frac{B}{B_{\text{target}}}\right)^\gamma \times \left[ 1 + \left(\frac{\Delta TVL_{\text{out}}}{\Delta TVL_{\text{in}}}\right) \right] \times \left(\frac{v_{\text{target}}}{v_{\text{actual}}}\right)$$
-
-**Retail Protection Threshold:**
-$$\text{If } B \le \text{Threshold}_t \implies \mathbf{\lambda(B) = 0}$$
-Everyday merchants and retail wallets below the threshold ($1,000\text{ TVEE}$) suffer **zero decay (100% full value)**. Only speculative whale vaults endure progressive burning.
-
-### 3.4 Pillar 4: Time Tokenization & Voucher Factoring
-A user locked in an unbonding phase who requires immediate capital can tokenize their unbonding slot into a **Time Voucher NFT**:
-- The user lists the voucher on the native order-book market at an explicit discount (e.g., selling a 10,000 TVEE entitlement for 9,200 TVEE cash today).
-- Capitalists with patient funds (**Discount Hunters**) purchase the voucher, funding the urgent seller instantly. When the unlock timestamp expires, the buyer claims the full 10,000 TVEE face value.
-- The protocol acts purely as an automated intermediary, collecting a minimal 0.3% trading fee.
+### 5.4 Pillar 4: Time Tokenization & Voucher Factoring
+Locked unbonding slots can be tokenized into **Time Voucher NFTs** and auctioned at a discount to patient capital (**Discount Hunters**), providing instant liquidity to distressed sellers while capturing steady spreads for long-term pools.
 
 ---
 
-## 4. Incentive Engineering: First-to-Sync & 10x Slashing
-We discard human-moderated arbiters in favor of an unyielding cryptographic rule: **First-To-Sync Wins**.
+## 6. Institutional Vault Architecture (3-in-5 Multi-Sig)
+All primary reserve assets (Bitcoin, Physical Gold RWA, Cash Reserves) are locked in `InstitutionalVault3of5.sol`, distributing administrative private keys across geopolitical borders:
 
+```
+                     ┌──────────────────────────────────────────────┐
+                     │   INSTITUTIONAL VAULT (3-OF-5 THRESHOLD)     │
+                     └──────────────────────┬───────────────────────┘
+                                            │
+        ┌──────────────┬──────────────┬─────┴────────┬──────────────┬──────────────┐
+        ▼              ▼              ▼              ▼              ▼
+   【 Key 1 】    【 Key 2 】    【 Key 3 】    【 Key 4 】    【 Key 5 】
+     T-VEE          T-VEE         Custodian      Custodian      Global Big-4
+   Tech Founder   Protocol Lead     Bank A         Bank B         Auditor
+   (บริหารเทคนิค) (สถาปัตยกรรม)   (คุมทองคำ/BTC) (คุมเงินฝากสากล) (เสียงชี้ขาด)
+```
+
+No asset movement can execute without **3 of 5 independent cryptographic signatures**, eliminating single-party rug-pulls and hostile sovereign asset freezing.
+
+---
+
+## 7. Incentive Engineering: First-to-Sync & 10x Slashing
 ```
 [ Counterfeit Copy Printed ] ---> Scanned First by Rogue  ---> First-to-Sync Wins (Claimed)
                                            │
@@ -128,79 +187,35 @@ We discard human-moderated arbiters in favor of an unyielding cryptographic rule
                                            ▼
           [ 10x Slashing Bounty Confiscated Directly from Minting Vault ]
 ```
-
-When a counterfeit copy of an already-synced note is presented to the network:
-```solidity
-function firstSyncWinsAndSlash(bytes32 tokenHash, address claimant) public returns (bool) {
-    if (!isSyncCompleted[tokenHash][currentEpoch]) {
-        isSyncCompleted[tokenHash][currentEpoch] = true;
-        tveeToken.creditFromOffline(claimant, note.denominationValue);
-        return true;
-    } else {
-        // Double-Spending detected: Slash rogue vault 10x
-        address rogueVault = note.mintedVault;
-        uint256 penaltyAmount = note.denominationValue * 10;
-        
-        require(vaultCollateral[rogueVault] >= penaltyAmount, "Vault bankrupt");
-        vaultCollateral[rogueVault] -= penaltyAmount;
-        tveeToken.creditFromOffline(claimant, penaltyAmount);
-        
-        emit SlashingExecuted(rogueVault, claimant, penaltyAmount, tokenHash);
-        return true;
-    }
-}
-```
-Because the minting vault is legally and programmatically forced to deposit a **1000% collateral reserve**, any rogue attempt to duplicate notes results in instantaneous financial ruin for the issuer, paying a 10x bounty directly to the victimized merchant.
+Because the minting vault must lock a **1000% collateral reserve**, rogue attempts to duplicate physical notes yield instantaneous financial ruin, paying an automated 10x compensation bounty directly into the victim's wallet.
 
 ---
 
-## 5. Implementation & Formal Verification
+## 8. Implementation & Formal Verification
 
-The protocol has been formally implemented in Solidity `^0.8.20` and tested under Hardhat.
+The protocol has been formally implemented in Solidity `^0.8.20` and verified under Hardhat.
 
-### Test Suite Execution
 ```text
   Time-Value Ecosystem (The 4 Pillars Test)
     ✔ เสาหลักที่ 1: Dynamic Unbonding - ยืดเวลาหน่วงถอนอัตโนมัติเมื่อราคา Coin X ร่วง
     ✔ เสาหลักที่ 3: Negative Interest Demurrage Tax - คำนวณอัตราเผาเหรียญยามเงินล้นตลาด
 
-  T-VEE & T-AAM Protocol Core Tests
-    ✔ Should protect retail users from Demurrage Tax (Retail Threshold)
-    ✔ Should allow First-To-Sync and trigger 10x Slashing on double spending fraud
+  T-VEE Protocol Core & Anti-Bot Armor Tests
+    ✔ 🛡️ Anti-Bot Test: ป้องกัน MEV Bot ไม่ให้ขโมยรหัสของชาวบ้านไปเคลมตัดหน้า
+    ✔ 🚨 Slashing Test: ตรวจจับ Double-Spending และริบทรัพย์คลังต้นทาง 10 เท่า
 
-  4 passing (2s)
+  Zero-Bot Architecture & Web-of-Trust Gatekeeper Tests
+    ✔ 🥷 1. Web-of-Trust Test: สมัครสมาชิกด้วยม่านตา (Proof of Humanity) + Code ผู้แนะนำ
+    ✔ 🧮 2. Rebase Stress Test: เฉพาะมนุษย์จริงที่ผ่านการรับรองเท่านั้นที่ได้รับการคุ้มครอง
+    ✔ ⛓️ 3. Social Slashing Test: ริบสิทธิ์ผู้แนะนำหากพบบัญชีนอมินีโกงระบบ
+
+  7 passing (3s)
 ```
 
 ---
 
-## 6. Repository Architecture
-```tree
-t-vee-protocol/
-├── contracts/                  # Solidity Core Smart Contracts
-│   ├── TVEEToken.sol           # Demurrage & Retail Threshold Token Core
-│   ├── TimeValueVault.sol      # The 4-Pillar Circuit Breaker & Time Exchange
-│   ├── OfflineNoteSync.sol     # JAB Code Sync, First-to-sync & 10x Slashing
-│   └── TAAMMarketplace.sol     # Universal Credit Term Invoice Factoring
-├── docs/                       # Technical Specifications
-│   ├── JAB_CODE_SPEC.md        # CMYK Matrix & Optical Density Standards
-│   └── PRINTING_GUIDE.md       # Physical Substrate & Scratch Foil Guidelines
-├── offline-engine/             # Offline Generation & Scanner Client
-│   ├── generate_pilot_batch.js # 20-Note Pilot Batch Generator
-│   ├── generate_jab_note.js    # Scratch Card Vector Renderer
-│   └── scanner_client.py       # Mobile Client Scanning Simulator
-├── pilot_batch/                # Production Ready Pilot Run
-│   ├── print_sheet.html        # A4 Print-Ready Layout (Ctrl+P)
-│   └── pilot_manifest.json     # Cryptographic Manifest of 20 Pilot Tokens
-├── scripts/                    # Deployment Automation
-│   ├── deploy_l2.js            # Arbitrum / Base Sepolia Deployment Engine
-│   └── deploy.js               # Local Testnet Deployer
-└── test/                       # Mathematical Unit Tests
-```
-
----
-
-## 7. Conclusion
-We have presented **T-VEE & The Time-Value Ecosystem**, a decentralized financial protocol that unites offline physical cash with an elastic, mathematical on-chain circuit breaker. By transforming money from an instrument of speculative hoarding into a high-velocity medium of production, and replacing abrupt market crashes with self-stabilizing time equations, the protocol provides an incorruptible foundation for the next century of global trade.
+## 9. Conclusion
+We have presented **T-VEE & The Time-Value Ecosystem**, a sovereign decentralized operating system that synthesizes offline physical color tokens with an unyielding on-chain mathematical core. By eliminating centralized bots, locking down sybil fragmentation via Web-of-Trust biometrics, and distributing institutional reserve custody across a 3-in-5 threshold, the protocol offers an unassailable financial foundation for humanity.
 
 Code is Law. Time is Money. Value belongs to the People.
 
@@ -209,6 +224,7 @@ Code is Law. Time is Money. Value belongs to the People.
 ## References
 1. **Nakamoto, S.** (2008). *Bitcoin: A Peer-to-Peer Electronic Cash System.*
 2. **Gesell, S.** (1916). *The Natural Economic Order (Die natürliche Wirtschaftsordnung).*
-3. **Pendle Finance.** (2022). *EIP-5115: Super Yield Token Standard & Time-Decay AMM.*
-4. **Curve Finance.** (2020). *Voting Escrow (veToken) Mechanics & Quadratic Decay.*
-5. **ISO/IEC 23634.** (2022). *Information Technology — Automatic Identification and Data Capture Techniques — JAB Code Polychrome Barcode Symbology Specification.*
+3. **Worldcoin Foundation.** (2023). *World ID: Privacy-Preserving Proof-of-Personhood Protocol.*
+4. **Pendle Finance.** (2022). *EIP-5115: Super Yield Token Standard & Time-Decay AMM.*
+5. **Curve Finance.** (2020). *Voting Escrow (veToken) Mechanics & Quadratic Decay.*
+6. **ISO/IEC 23634.** (2022). *Information Technology — JAB Code Polychrome Barcode Symbology Specification.*
